@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<p>
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p><h3>Get Notified With The Products On Sale </h3></p>
+    </div>
+
+    <span>Product </span>
+    <input type="text" name="strProduct" id="strProduct" />
+    <input type="submit" value="Search" onclick="alertFunc();" />
+</p>
+<p>
+    <span id="strResult">
+
+    </span>
+</p>
+
+<p>
+    <h5> Get the  details of all the products on sale</h5>
+    <br>
+    <h6>"Only for Platinum Customers!!!"</h6>
+</p>
+<form  asp-controller="Products" asp-action="OnSaleProducts" method="post"> 
+    <input  type ="submit" value="On Sale Products"/>
+</form>
+    
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+
+
+    var myInterval;
+
+    //function myFunction() {
+    //    /* alert("Hello");*/
+    //     myInterval = setInterval(alertFunc, 5000);
+    //}
+
+    function alertFunc() {
+        @*/* alert("Hello!");*/
+        var url = '@Url.Content("~/")' + "Home/GetNotified";
+        $.post(url, { strProduct: $("#strProduct").val() }, function (data) {
+            $("#strResult").val(data)
+        });*@
+
+        var result = document.getElementById("strResult");
+        var inputText = document.getElementById("strProduct").value;
+        $.post("/Home/GetNotified", { strProduct: inputText }, function (data) {
+          /*  $("#strResult").val(data)*/
+            /*alert(data);*/
+            if (data == "True") {
+                alert("The Selected Product is on Sale ");
+                /*clearInterval(myInterval);*/
+            }
+            else {
+
+                    alert("Not in sale now. We will notify you when your selected product is on sale");
+
+                myInterval = setInterval(alertFunc2, 3000);
+            }
+        });
+    }
+    function alertFunc2() {
+        var result = document.getElementById("strResult");
+        var inputText = document.getElementById("strProduct").value;
+        $.post("/Home/GetNotified", { strProduct: inputText }, function (data) {
+            /*  $("#strResult").val(data)*/
+            /*alert(data);*/
+            if (data == "True") {
+                alert("The Selected Product is on Sale ");
+                clearInterval(myInterval);
+            }
+            else {
+                setTimeout(alertFunc2, 3000);
+            }
+        });
+    }
+
+
+
+
+    //function Notify() {
+    //    //var input = document.getElementById("strProduct").value;
+    //    //var ProductController = new ProductController();
+    //    //ProductController.
+    //    alert("Ritik");
+
+    //}
+</script>
+
+<form >
+
+</form>
+
